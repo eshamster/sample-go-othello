@@ -7,11 +7,11 @@ import (
 func TestGetMovePosition(t *testing.T) {
 	move := MakeMove(3, 5)
 	expectX := uint(3)
-	actualX := GetMoveX(move)
+	actualX := move.GetX()
 	expectY := uint(5)
-	actualY := GetMoveY(move)
+	actualY := move.GetY()
 	expectBit := uint64(1 << (5 + 3*8))
-	actualBit := GetMoveBit(move)
+	actualBit := move.GetBit()
 
 	if expectX != actualX {
 		t.Errorf("X: %d != %d", expectX, actualX)
