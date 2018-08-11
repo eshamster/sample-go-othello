@@ -23,3 +23,8 @@ func GetMoveX(move Move) uint {
 func GetMoveY(move Move) uint {
 	return uint(bits.TrailingZeros64(move.move)) % 8
 }
+
+// GetMoveBit gets a move by bit flag style
+func GetMoveBit(move Move) uint64 {
+	return move.move
+}
