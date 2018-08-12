@@ -69,6 +69,12 @@ func MakeBoard() Board {
 	return board
 }
 
+// CopyBoard copies src board to dst one
+func CopyBoard(src, dst *Board) {
+	dst.white = src.white
+	dst.black = src.black
+}
+
 func getNextMoveBit(moveBit uint64, direction int) (uint64, bool) {
 	maskToBottom := uint64(0x00ffffffffffffff)
 	maskToTop := uint64(0xffffffffffffff00)

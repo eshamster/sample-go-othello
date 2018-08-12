@@ -34,6 +34,16 @@ func TestBoardPrint(t *testing.T) {
 	checkBoardResult(t, expected, &board)
 }
 
+func TestCopyBoard(t *testing.T) {
+	board := MakeBoard()
+	board.setMoveRaw(move.MakeMove(0, 0), true)
+
+	var dst Board
+	CopyBoard(&board, &dst)
+
+	checkBoardResult(t, getBoardString(&board), &dst)
+}
+
 func setPiecesRaw(board *Board, pieces [][2]uint, isWhite bool) {
 	for _, piece := range pieces {
 		x := piece[0]
