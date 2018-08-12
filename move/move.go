@@ -28,3 +28,8 @@ func (move *Move) GetY() uint {
 func (move *Move) GetBit() uint64 {
 	return move.move
 }
+
+// Equals checks if the both moves are same
+func (move *Move) Equals(target *Move) bool {
+	return move.move == target.move
+}

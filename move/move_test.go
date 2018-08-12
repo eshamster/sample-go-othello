@@ -23,3 +23,16 @@ func TestGetMovePosition(t *testing.T) {
 		t.Errorf("Bit: %d != %d", expectBit, actualBit)
 	}
 }
+
+func TestEquals(t *testing.T) {
+	move := MakeMove(1, 2)
+	moveSame := MakeMove(1, 2)
+	moveDiff := MakeMove(2, 1)
+
+	if !move.Equals(&moveSame) {
+		t.Errorf("The 2 moves should be same")
+	}
+	if move.Equals(&moveDiff) {
+		t.Errorf("The 2 moves should be different")
+	}
+}
