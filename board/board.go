@@ -212,6 +212,22 @@ func (board *Board) HasLegalMove(isWhite bool) bool {
 	return false
 }
 
+// GetLegalMoves returns all legal moves
+func (board *Board) GetLegalMoves(isWhite bool) []move.Move {
+	result := []move.Move{}
+
+	// TODO: Use more sophisticated way to get candidates
+	for y := uint(0); y < 8; y++ {
+		for x := uint(0); x < 8; x++ {
+			move := move.MakeMove(x, y)
+			if board.IsLegalMove(move, isWhite) {
+				result = append(result, move)
+			}
+		}
+	}
+	return result
+}
+
 func printSquare(w io.Writer, state int) {
 	switch state {
 	case Empty:

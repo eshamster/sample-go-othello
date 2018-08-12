@@ -211,3 +211,40 @@ func TestHasLegalMove(t *testing.T) {
 		t.Errorf("The board should have legal moves for black")
 	}
 }
+
+func checkLegalMoves(t *testing.T, expected, resultMoves []move.Move) {
+	checkResult := true
+
+LOOP:
+	for _, target := range expected {
+		for _, result := range resultMoves {
+			if result.Equals(&target) {
+				continue LOOP
+			}
+		}
+		checkResult = false
+		break LOOP
+	}
+
+	if !checkResult || len(expected) != len(resultMoves) {
+		t.Errorf("%v should have same moves to %v", resultMoves, expected)
+	}
+}
+
+func TestGetLegalMoves(t *testing.T) {
+	board := MakeBoard()
+
+	checkLegalMoves(t, []move.Move{
+		move.MakeMove(2, 3),
+		move.MakeMove(3, 2),
+		move.MakeMove(4, 5),
+		move.MakeMove(5, 4),
+	}, board.GetLegalMoves(true))
+
+	checkLegalMoves(t, []move.Move{
+		move.MakeMove(2, 4),
+		move.MakeMove(3, 5),
+		move.MakeMove(4, 2),
+		move.MakeMove(5, 3),
+	}, board.GetLegalMoves(false))
+}
