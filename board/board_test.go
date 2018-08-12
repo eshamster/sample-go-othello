@@ -184,10 +184,10 @@ func TestHasLegalMove(t *testing.T) {
 	checkBoardResult(t, expected, &board)
 
 	// Test using modified board
-	if !board.HasLegalMove(true) {
-		t.Errorf("The board should have legal moves for white")
+	if board.HasLegalMove(true) {
+		t.Errorf("The board should not have legal moves for white")
 	}
-	if board.HasLegalMove(false) {
-		t.Errorf("The board should not have legal moves for black")
+	if !board.HasLegalMove(false) {
+		t.Errorf("The board should have legal moves for black")
 	}
 }
