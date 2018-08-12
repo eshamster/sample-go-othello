@@ -151,3 +151,43 @@ func TestIsLegalMove(t *testing.T) {
 	testIsLegal(t, 3, 3, false, false)
 	// TODO: illegal: out of board
 }
+
+func TestHasLegalMove(t *testing.T) {
+	board := MakeBoard()
+
+	// Test using initial board
+	if !board.HasLegalMove(true) {
+		t.Errorf("The inital board should have legal moves for white")
+	}
+	if !board.HasLegalMove(false) {
+		t.Errorf("The inital board should have legal moves for black")
+	}
+
+	// Modify board
+	setPiecesRaw(&board, [][2]uint{
+		{2, 2}, {3, 2}, {4, 2}, {5, 2},
+		{2, 3}, {5, 3},
+		{2, 4}, {5, 4},
+		{2, 5}, {3, 5}, {4, 5}, {5, 5},
+	}, true)
+	setPiecesRaw(&board, [][2]uint{{3, 4}, {4, 3}}, false)
+
+	expected := `--------
+--------
+--oooo--
+--oxxo--
+--oxxo--
+--oooo--
+--------
+--------
+`
+	checkBoardResult(t, expected, &board)
+
+	// Test using modified board
+	if !board.HasLegalMove(true) {
+		t.Errorf("The board should have legal moves for white")
+	}
+	if board.HasLegalMove(false) {
+		t.Errorf("The board should not have legal moves for black")
+	}
+}
