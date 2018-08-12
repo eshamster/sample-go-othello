@@ -10,7 +10,7 @@ func TestGetMovePosition(t *testing.T) {
 	actualX := move.GetX()
 	expectY := uint(5)
 	actualY := move.GetY()
-	expectBit := uint64(1 << (5 + 3*8))
+	expectBit := uint64(1 << (3 + 5*8))
 	actualBit := move.GetBit()
 
 	if expectX != actualX {
