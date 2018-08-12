@@ -223,9 +223,16 @@ func printSquare(w io.Writer, state int) {
 	}
 }
 
-// PrintBoard prints board to standard output
-func (board *Board) PrintBoard(w io.Writer) {
+// PrintBoard prints board to specified output
+func (board *Board) PrintBoard(w io.Writer, printsNumber bool) {
+	if printsNumber {
+		fmt.Fprintln(w, "  abcdefgh")
+	}
+
 	for y := uint(0); y < 8; y++ {
+		if printsNumber {
+			fmt.Fprintf(w, "%d ", y+1)
+		}
 		for x := uint(0); x < 8; x++ {
 			printSquare(w, board.getSquareState(move.MakeMove(x, y)))
 		}

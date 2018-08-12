@@ -6,14 +6,14 @@ import (
 	"testing"
 )
 
-func getBoardString(board *Board) string {
+func getBoardString(board *Board, printsNumber bool) string {
 	buf := &bytes.Buffer{}
-	board.PrintBoard(buf)
+	board.PrintBoard(buf, printsNumber)
 	return buf.String()
 }
 
 func checkBoardResult(t *testing.T, expectedString string, board *Board) {
-	result := getBoardString(board)
+	result := getBoardString(board, false)
 
 	if expectedString != result {
 		t.Errorf("Expected:\n%s\nResult:\n%s", expectedString, result)
@@ -34,6 +34,26 @@ func TestBoardPrint(t *testing.T) {
 	checkBoardResult(t, expected, &board)
 }
 
+func TestBoardPrintWithNumber(t *testing.T) {
+	board := MakeBoard()
+	expectedString := `  abcdefgh
+1 --------
+2 --------
+3 --------
+4 ---xo---
+5 ---ox---
+6 --------
+7 --------
+8 --------
+`
+
+	result := getBoardString(&board, true)
+
+	if expectedString != result {
+		t.Errorf("Expected:\n%s\nResult:\n%s", expectedString, result)
+	}
+}
+
 func TestCopyBoard(t *testing.T) {
 	board := MakeBoard()
 	board.setMoveRaw(move.MakeMove(0, 0), true)
@@ -41,7 +61,7 @@ func TestCopyBoard(t *testing.T) {
 	var dst Board
 	CopyBoard(&board, &dst)
 
-	checkBoardResult(t, getBoardString(&board), &dst)
+	checkBoardResult(t, getBoardString(&board, false), &dst)
 }
 
 func setPiecesRaw(board *Board, pieces [][2]uint, isWhite bool) {
