@@ -112,6 +112,12 @@ func (game *Game) GoBackTo(targetTurnCount uint) bool {
 	return true
 }
 
+// GetLegalMoves returns legal moves in current turn
+func (game *Game) GetLegalMoves() []move.Move {
+	snapshot := game.history[game.turnCount]
+	return snapshot.board.GetLegalMoves(snapshot.turn == white)
+}
+
 func turnToString(turn int) string {
 	switch turn {
 	case white:
