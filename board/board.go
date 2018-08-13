@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/bits"
 )
 
 // Board is a structure having board information
@@ -226,6 +227,11 @@ func (board *Board) GetLegalMoves(isWhite bool) []move.Move {
 		}
 	}
 	return result
+}
+
+// GetPieceCounts returns (white piece count, black piece count).
+func (board *Board) GetPieceCounts() (int, int) {
+	return bits.OnesCount64(board.white), bits.OnesCount64(board.black)
 }
 
 func printSquare(w io.Writer, state int) {

@@ -6,6 +6,8 @@ import (
 	"testing"
 )
 
+// TODO: Test GameEnd case
+
 func getGameString(game *Game) string {
 	buf := &bytes.Buffer{}
 	game.PrintGame(buf)
@@ -83,4 +85,21 @@ func TestSetAndGoBack(t *testing.T) {
 	checkGameState(t, expected, &game)
 }
 
-// TODO: Test GameEnd case
+func TestGetPieceCounts(t *testing.T) {
+	game := MakeGame()
+	retval := game.MoveGame(move.MakeMove(2, 3))
+
+	if !retval {
+		t.Errorf("Failed to set move to (2, 3)")
+	}
+
+	white, black := game.GetPieceCounts()
+	expectedWhite := 4
+	expectedBlack := 1
+
+	if white != expectedWhite || black != expectedBlack {
+		t.Errorf("(white, black): (%d, %d) != (%d, %d)\n",
+			expectedWhite, expectedBlack,
+			white, black)
+	}
+}

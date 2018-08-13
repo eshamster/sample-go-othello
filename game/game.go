@@ -118,6 +118,11 @@ func (game *Game) GetLegalMoves() []move.Move {
 	return snapshot.board.GetLegalMoves(snapshot.turn == white)
 }
 
+// GetPieceCounts returns (white piece count, black piece count).
+func (game *Game) GetPieceCounts() (int, int) {
+	return game.history[game.turnCount].board.GetPieceCounts()
+}
+
 func turnToString(turn int) string {
 	switch turn {
 	case white:

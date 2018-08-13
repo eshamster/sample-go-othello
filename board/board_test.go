@@ -248,3 +248,22 @@ func TestGetLegalMoves(t *testing.T) {
 		move.MakeMove(5, 3),
 	}, board.GetLegalMoves(false))
 }
+
+func TestGetPieceCounts(t *testing.T) {
+	board := MakeBoard()
+	retval := board.SetMove(move.MakeMove(2, 3), true)
+
+	if !retval {
+		t.Errorf("Failed to set move to (2, 3)")
+	}
+
+	white, black := board.GetPieceCounts()
+	expectedWhite := 4
+	expectedBlack := 1
+
+	if white != expectedWhite || black != expectedBlack {
+		t.Errorf("(white, black): (%d, %d) != (%d, %d)\n",
+			expectedWhite, expectedBlack,
+			white, black)
+	}
+}
