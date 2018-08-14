@@ -13,13 +13,13 @@ type McPlayer struct {
 	simulateTimes int
 }
 
-type nodeInfo struct {
+type simulateNode struct {
 	winCount, selectCount int
 }
 
 type simulateInfo struct {
-	moves     []move.Move
-	nodeInfos []nodeInfo
+	moves []move.Move
+	nodes []simulateNode
 }
 
 // MakeMcPlayer makes a player using simple Monte-Carlo method
@@ -39,34 +39,35 @@ func (player *McPlayer) GetMove(game *game.Game) move.Move {
 	legalMoves := game.GetLegalMoves()
 
 	info := simulateInfo{
-		moves:     legalMoves,
-		nodeInfos: make([]nodeInfo, len(legalMoves)),
+		moves: legalMoves,
+		nodes: make([]simulateNode, len(legalMoves)),
 	}
 
 	for i := 0; i < player.simulateTimes; i++ {
-		selectIndex := player.selectNode(game, &info)
+		selectIndex := selectNode(game, info.nodes)
 
 		game.MoveGame(info.moves[selectIndex])
-		info.nodeInfos[selectIndex].selectCount++
-		info.nodeInfos[selectIndex].winCount += player.simulateOnce(game, isWhiteTurn)
+		info.nodes[selectIndex].selectCount++
+		info.nodes[selectIndex].winCount +=
+			simulateOnce(game, player.randomPlayer, isWhiteTurn)
 		game.GoBackTo(preTurnCount)
 	}
 
 	// TODO: Using average rate is maybe better than UCB value.
-	return info.moves[player.selectNode(game, &info)]
+	return info.moves[selectNode(game, info.nodes)]
 }
 
-func (player *McPlayer) selectNode(game *game.Game, info *simulateInfo) int {
+func selectNode(game *game.Game, nodes []simulateNode) int {
 	simulateCount := 0
 
-	for _, node := range info.nodeInfos {
+	for _, node := range nodes {
 		simulateCount += node.selectCount
 	}
 
 	maxUcb := float64(-99999)
 	maxIndex := 0
 
-	for i, node := range info.nodeInfos {
+	for i, node := range nodes {
 		ucb := calcUcbDefault(node.winCount, node.selectCount, simulateCount)
 
 		if ucb > maxUcb {
@@ -79,13 +80,13 @@ func (player *McPlayer) selectNode(game *game.Game, info *simulateInfo) int {
 }
 
 // Return 1 if win, 0 if draw, -1 if lose.
-func (player *McPlayer) simulateOnce(game *game.Game, isWhiteTurn bool) int {
+func simulateOnce(game *game.Game, player *RandomPlayer, isWhiteTurn bool) int {
 	preTurnCount := game.GetTurnCount()
 	defer game.GoBackTo(preTurnCount)
 
 	for !game.IsGameEnd() {
 		// XXX: Should check if MoveGame succeeded or not.
-		game.MoveGame(player.randomPlayer.GetMove(game))
+		game.MoveGame(player.GetMove(game))
 	}
 
 	white, black := game.GetPieceCounts()
