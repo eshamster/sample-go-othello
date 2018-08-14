@@ -36,3 +36,17 @@ func TestPlay(t *testing.T) {
 		t.Errorf("Game should be finished after play.MoveToEnd")
 	}
 }
+
+func TestPlaySomeGames(t *testing.T) {
+	player1 := player.MakeRandomPlayer(player.DefaultPolicy)
+	player2 := player.MakeRandomPlayer(player.DefaultPolicy)
+	expectedCount := 12
+
+	p1Win, p2Win, draw := PlaySomeGames(&player1, &player2, expectedCount)
+	count := p1Win + p2Win + draw
+
+	if expectedCount != count {
+		t.Errorf("Expected: %d, Actual: %d (%d + %d + %d)\n",
+			expectedCount, count, p1Win, p2Win, draw)
+	}
+}

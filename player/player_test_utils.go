@@ -24,4 +24,3 @@ func testPlayer(t *testing.T, player Player) {
 		t.Errorf("Turn count is not right: %d != %d", expectedTurnCount, actualTurnCount)
 	}
 }
-

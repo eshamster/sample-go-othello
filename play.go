@@ -5,7 +5,9 @@ import (
 	"./move"
 	"./player"
 	"fmt"
+	"math/rand"
 	"os"
+	"time"
 )
 
 // Play manages a game play.
@@ -67,4 +69,38 @@ func (play *Play) MoveToEnd(prints bool) {
 			play.game.PrintGame(os.Stdout)
 		}
 	}
+}
+
+// Returns winning count of (player1, player2, draw).
+// It can be used for easy checking of player's strength.
+func PlaySomeGames(player1, player2 player.Player, playTimes int) (int, int, int) {
+	// Temporal testing to check strength of player
+	rand.Seed(time.Now().UnixNano())
+
+	players := []player.Player{player1, player2}
+
+	winCounts := [3]int{0, 0, 0} // player1, player2, draw
+
+	for i := 0; i < playTimes; i++ {
+		wIndex := 0
+		bIndex := 1
+		if i%2 == 1 {
+			wIndex = 1
+			bIndex = 0
+		}
+
+		play := MakePlay(players[wIndex], players[bIndex])
+		play.MoveToEnd(false)
+
+		white, black := play.game.GetPieceCounts()
+		if white > black {
+			winCounts[wIndex]++
+		} else if white < black {
+			winCounts[bIndex]++
+		} else {
+			winCounts[2]++
+		}
+	}
+
+	return winCounts[0], winCounts[1], winCounts[2]
 }
