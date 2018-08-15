@@ -6,11 +6,12 @@ import (
 )
 
 func main() {
-	player1 := player.MakeRandomPlayer(player.DefaultPolicy)
 	randPlayer := player.MakeRandomPlayer(player.DefaultPolicy)
-	player2 := player.MakeMcPlayer(&randPlayer, 100)
+	// player1 := player.MakeRandomPlayer(player.DefaultPolicy)
+	player1 := player.MakeMcPlayer(&randPlayer, 200)
+	player2 := player.MakeUctPlayer(&randPlayer, 200)
 
-	p1Win, p2Win, draw := PlaySomeGames(&player1, &player2, 11)
+	p1Win, p2Win, draw := PlaySomeGames(&player1, &player2, 100)
 
 	fmt.Printf("P1:P2:D = %d:%d:%d\n", p1Win, p2Win, draw)
 }
