@@ -123,6 +123,11 @@ func (game *Game) GetPieceCounts() (int, int) {
 	return game.history[game.turnCount].board.GetPieceCounts()
 }
 
+// GetSquareState shows the square is either White, Black or Empty.
+func (game *Game) GetSquareState(move move.Move) int {
+	return game.history[game.turnCount].board.GetSquareState(move)
+}
+
 func turnToString(turn int) string {
 	switch turn {
 	case white:

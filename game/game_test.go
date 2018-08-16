@@ -1,6 +1,7 @@
 package game
 
 import (
+	"../board"
 	"../move"
 	"bytes"
 	"testing"
@@ -102,4 +103,23 @@ func TestGetPieceCounts(t *testing.T) {
 			expectedWhite, expectedBlack,
 			white, black)
 	}
+}
+
+func checkSquareState(t *testing.T, game *Game, expected int, move move.Move) {
+	actual := game.GetSquareState(move)
+
+	if expected != actual {
+		t.Errorf("Move(%d, %d) should be %s (=%d): actual: %s (=%d)",
+			move.GetX(), move.GetY(),
+			board.ConvertSquareStateToString(expected), expected,
+			board.ConvertSquareStateToString(actual), actual)
+	}
+}
+
+func TestGetSquareState(t *testing.T) {
+	game := MakeGame()
+
+	checkSquareState(t, &game, board.White, move.MakeMove(3, 4))
+	checkSquareState(t, &game, board.Black, move.MakeMove(4, 4))
+	checkSquareState(t, &game, board.Empty, move.MakeMove(2, 2))
 }

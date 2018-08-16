@@ -22,6 +22,17 @@ const (
 	Black
 )
 
+// ConvertSquareStateToString converts state (White, Black, Empty) to string.
+func ConvertSquareStateToString(state int) string {
+	if state == White {
+		return "White"
+	} else if state == Black {
+		return "Black"
+	}
+	// TODO: It is better to check if state is Empty.
+	return "Empty"
+}
+
 // Direction
 const (
 	top = iota
@@ -34,7 +45,8 @@ const (
 	topLeft
 )
 
-func (board *Board) getSquareState(move move.Move) int {
+// GetSquareState shows the square is either White, Black or Empty.
+func (board *Board) GetSquareState(move move.Move) int {
 	moveBit := move.GetBit()
 
 	if board.black&moveBit != 0 {
@@ -185,7 +197,7 @@ func (board *Board) SetMove(move move.Move, isWhite bool) bool {
 
 // IsLegalMove returns the move is legal or not
 func (board *Board) IsLegalMove(move move.Move, isWhite bool) bool {
-	if board.getSquareState(move) != Empty {
+	if board.GetSquareState(move) != Empty {
 		return false
 	}
 
@@ -256,7 +268,7 @@ func (board *Board) PrintBoard(w io.Writer, printsNumber bool) {
 			fmt.Fprintf(w, "%d ", y+1)
 		}
 		for x := uint(0); x < 8; x++ {
-			printSquare(w, board.getSquareState(move.MakeMove(x, y)))
+			printSquare(w, board.GetSquareState(move.MakeMove(x, y)))
 		}
 		fmt.Fprint(w, "\n")
 	}

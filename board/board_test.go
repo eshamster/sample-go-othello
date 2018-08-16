@@ -267,3 +267,39 @@ func TestGetPieceCounts(t *testing.T) {
 			white, black)
 	}
 }
+
+func TestConvertSquareStateToString(t *testing.T) {
+	var actual string
+
+	actual = ConvertSquareStateToString(White)
+	if "White" != actual {
+		t.Errorf("White (=%d) failed to convert to \"%s\"", White, actual)
+	}
+	actual = ConvertSquareStateToString(Black)
+	if "Black" != actual {
+		t.Errorf("Black (=%d) failed to convert to \"%s\"", Black, actual)
+	}
+	actual = ConvertSquareStateToString(Empty)
+	if "Empty" != actual {
+		t.Errorf("Empty (=%d) failed to convert to \"%s\"", Empty, actual)
+	}
+}
+
+func checkSquareState(t *testing.T, board *Board, expected int, move move.Move) {
+	actual := board.GetSquareState(move)
+
+	if expected != actual {
+		t.Errorf("Move(%d, %d) should be %s (=%d): actual: %s (=%d)",
+			move.GetX(), move.GetY(),
+			ConvertSquareStateToString(expected), expected,
+			ConvertSquareStateToString(actual), actual)
+	}
+}
+
+func TestGetSquareState(t *testing.T) {
+	board := MakeBoard()
+
+	checkSquareState(t, &board, White, move.MakeMove(3, 4))
+	checkSquareState(t, &board, Black, move.MakeMove(4, 4))
+	checkSquareState(t, &board, Empty, move.MakeMove(2, 2))
+}
