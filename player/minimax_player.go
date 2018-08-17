@@ -36,12 +36,12 @@ func (player *MinimaxPlayer) GetMove(game *game.Game) move.Move {
 	defer game.GoBackTo(preTurnCount)
 
 	rootNode := new(minimaxNode)
-	player.evaluateRecursively(game, rootNode, 0)
+	player.evaluateRecursively(game, rootNode, 0, -maxEvaluateValue, maxEvaluateValue)
 
 	return rootNode.moves[rootNode.getMaxChildIndex()]
 }
 
-func (player *MinimaxPlayer) evaluateRecursively(game *game.Game, node *minimaxNode, depth int) {
+func (player *MinimaxPlayer) evaluateRecursively(game *game.Game, node *minimaxNode, depth int, alpha int, beta int) {
 	if game.IsGameEnd() || depth >= player.searchDepth {
 		node.evalValue = evaluateBoard(game)
 		// TODO: Error if node.parent is nil.
@@ -60,12 +60,26 @@ func (player *MinimaxPlayer) evaluateRecursively(game *game.Game, node *minimaxN
 
 	for i, move := range node.moves {
 		game.MoveGame(move)
-		node.children[i].parent = node
-		player.evaluateRecursively(game, &node.children[i], depth+1)
+		child := &node.children[i]
+		child.parent = node
+
+		if node.isWhite != game.IsWhiteTurn() {
+			player.evaluateRecursively(game, child, depth+1, -beta, -alpha)
+		} else {
+			player.evaluateRecursively(game, child, depth+1, alpha, beta)
+		}
+
 		game.GoBackTo(preTurnCount)
+
+		if alpha < child.evalValue {
+			alpha = child.evalValue
+		}
+		if alpha > beta {
+			break
+		}
 	}
 
-	node.evalValue = node.children[node.getMaxChildIndex()].evalValue
+	node.evalValue = alpha
 	if node.parent != nil &&
 		node.isWhite != node.parent.isWhite {
 		node.evalValue *= -1
