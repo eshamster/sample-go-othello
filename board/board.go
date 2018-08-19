@@ -229,11 +229,25 @@ func (board *Board) HasLegalMove(isWhite bool) bool {
 func (board *Board) GetLegalMoves(isWhite bool) []move.Move {
 	result := []move.Move{}
 
+	otherBoard := board.black
+	if !isWhite {
+		otherBoard = board.white
+	}
+
+	candidateBoard :=
+		(otherBoard << 1) | (otherBoard >> 1) |
+			(otherBoard << 8) | (otherBoard >> 8) |
+			(otherBoard << 7) | (otherBoard >> 7) |
+			(otherBoard << 9) | (otherBoard >> 9)
+
+	candidateBoard &= ^board.white
+	candidateBoard &= ^board.black
+
 	// TODO: Use more sophisticated way to get candidates
 	for y := uint(0); y < 8; y++ {
 		for x := uint(0); x < 8; x++ {
 			move := move.MakeMove(x, y)
-			if board.IsLegalMove(move, isWhite) {
+			if (candidateBoard&move.GetBit() != 0) && board.IsLegalMove(move, isWhite) {
 				result = append(result, move)
 			}
 		}
