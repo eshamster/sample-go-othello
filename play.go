@@ -71,7 +71,8 @@ func (play *Play) MoveToEnd(prints bool) {
 	}
 }
 
-// Returns winning count of (player1, player2, draw).
+// PlaySomeGames plays game some times.
+// It returns winning count of (player1, player2, draw).
 // It can be used for easy checking of player's strength.
 func PlaySomeGames(player1, player2 player.Player, playTimes int) (int, int, int) {
 	// Temporal testing to check strength of player
