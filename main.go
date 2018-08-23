@@ -1,19 +1,39 @@
 package main
 
 import (
-	"./player"
+	"./player/manager"
+	"bufio"
 	"fmt"
+	"os"
+	"strings"
 )
 
+func initPlayerMap() manager.PlayerMap {
+	playerMap := manager.MakePlayerMap()
+
+	fp, err := os.Open("./DEF_PLAYER")
+	if err != nil {
+		panic(err)
+	}
+	defer fp.Close()
+
+	scanner := bufio.NewScanner(fp)
+	for scanner.Scan() {
+		text := scanner.Text()
+
+		if !strings.HasPrefix(text, "#") {
+			ok := playerMap.Add(text)
+			if !ok {
+				panic(fmt.Sprintf("Error: \"%s\" is invalid player definition.\n", text))
+			}
+		}
+	}
+
+	return playerMap
+}
+
 func main() {
-	// randPlayer := player.MakeRandomPlayer(player.DefaultPolicy)
-	player1 := player.MakeRandomPlayer(player.DefaultPolicy)
-	// player1 := player.MakeMcPlayer(&randPlayer, 100)
-	// player2 := player.MakeUctPlayer(&randPlayer, 100)
-	// player2 := player.MakeHumanPlayer(player.MakeDefaultHumanMoveSelector())
-	player2 := player.MakeMinimaxPlayer(4)
+	playerMap := initPlayerMap()
 
-	p1Win, p2Win, draw := PlaySomeGames(&player1, &player2, 50)
-
-	fmt.Printf("P1:P2:D = %d:%d:%d\n", p1Win, p2Win, draw)
+	fmt.Printf("%#v\n", playerMap)
 }

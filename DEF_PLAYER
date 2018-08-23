@@ -1,0 +1,6 @@
+# <name> <kind> <extra arguments..>
+human human
+minimax minimax 6
+random random
+mc mc 10000
+uct uct 10000
