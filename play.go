@@ -74,7 +74,7 @@ func (play *Play) MoveToEnd(prints bool) {
 // PlaySomeGames plays game some times.
 // It returns winning count of (player1, player2, draw).
 // It can be used for easy checking of player's strength.
-func PlaySomeGames(player1, player2 player.Player, playTimes int) (int, int, int) {
+func PlaySomeGames(player1, player2 player.Player, playTimes int, prints bool) (int, int, int) {
 	// Temporal testing to check strength of player
 	rand.Seed(time.Now().UnixNano())
 
@@ -91,7 +91,7 @@ func PlaySomeGames(player1, player2 player.Player, playTimes int) (int, int, int
 		}
 
 		play := MakePlay(players[wIndex], players[bIndex])
-		play.MoveToEnd(false)
+		play.MoveToEnd(prints)
 
 		white, black := play.game.GetPieceCounts()
 		if white > black {

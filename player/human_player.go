@@ -28,7 +28,6 @@ func MakeHumanPlayer(selectHumanMove SelectHumanMove) HumanPlayer {
 // MakeDefaultHumanMoveSelector return default SelectHumanMove.
 func MakeDefaultHumanMoveSelector() SelectHumanMove {
 	return func(humanMoves []string, game *game.Game) string {
-		game.PrintGame(os.Stdin)
 		fmt.Printf("\nLegal Moves: %s\n", strings.Join(humanMoves, ", "))
 
 		result := ""

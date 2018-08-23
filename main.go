@@ -55,7 +55,12 @@ func main() {
 		}
 	}
 
-	p1Win, p2Win, draw := PlaySomeGames(players[0], players[1], playTimes)
+	prints := false
+	if playerNames[0] == "human" || playerNames[1] == "human" {
+		prints = true
+	}
+
+	p1Win, p2Win, draw := PlaySomeGames(players[0], players[1], playTimes, prints)
 
 	fmt.Printf("Play result: P1:P2:Draw = %d:%d:%d\n", p1Win, p2Win, draw)
 }
